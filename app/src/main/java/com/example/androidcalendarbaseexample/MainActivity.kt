@@ -12,9 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.androidcalendarbaseexample.ui.theme.AndroidCalendarBaseExampleTheme
+import com.naim.android_calendar_core.TestFactory
 import com.naim.android_calendar_core.config.calendar_config.CalendarConfig
 import com.naim.android_calendar_core.viewmodel.CalendarViewModel
 import com.naim.android_calendar_core.viewmodel.factory.CalendarViewModelFactory
+
+
 import java.util.*
 
 class MainActivity : ComponentActivity() {
@@ -28,7 +31,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println(viewModel.monthItems.value)
+        println(TestFactory.test())
         setContent {
             AndroidCalendarBaseExampleTheme {
                 // A surface container using the 'background' color from the theme
