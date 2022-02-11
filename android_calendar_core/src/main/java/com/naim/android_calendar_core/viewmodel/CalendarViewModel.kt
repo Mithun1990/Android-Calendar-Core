@@ -7,6 +7,7 @@ import com.naim.android_calendar_core.config.calendar_config.CalendarConfig
 import com.naim.android_calendar_core.extensions.*
 import com.naim.android_calendar_core.model.MonthItem
 import com.naim.android_calendar_core.state.CalendarUiState
+import com.naim.android_calendar_core.state.CalendarUiView
 import java.util.*
 
 class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel() {
@@ -17,15 +18,22 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
             Date(), emptyList()
         )
     )
-    private val selectedDate = MutableLiveData(Date())
-    val ui: LiveData<Date> = selectedDate
+    private val _monthList =
+        MutableLiveData(
+            calendarConfig.monthConfig.getMonthList(
+                uiState.value?.selectedDate?.getTheYear()
+                    ?: calendarConfig.currentDate.getTheYear()
+            )
+        )
     val uiState: LiveData<CalendarUiState>
         get() = _uiState
     val monthItems: LiveData<List<MonthItem>>
         get() = _monthItems
 
+    val monthList = _monthList
+
     fun nextMonth() {
-        val nextDate = getFormattedDate(
+        val nextDate = calendarConfig.getFormattedDate(
             calendarConfig.monthConfig.getNextYear(
                 uiState.value!!.selectedDate.getTheMonth(),
                 uiState.value!!.selectedDate.getTheYear()
@@ -40,7 +48,7 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     }
 
     fun gotoNextYear() {
-        val nextYear = getFormattedDate(
+        val nextYear = calendarConfig.getFormattedDate(
             uiState.value!!.selectedDate.getTheYear() + 1,
             uiState.value!!.selectedDate.getTheMonth(),
             uiState.value!!.selectedDate.getTheDay()
@@ -52,7 +60,7 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     }
 
     fun gotoPreviousYear() {
-        val nextYear = getFormattedDate(
+        val nextYear = calendarConfig.getFormattedDate(
             uiState.value!!.selectedDate.getTheYear() - 1,
             uiState.value!!.selectedDate.getTheMonth(),
             uiState.value!!.selectedDate.getTheDay()
@@ -64,7 +72,7 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     }
 
     fun gotoPreviousMonth() {
-        val prevDate = getFormattedDate(
+        val prevDate = calendarConfig.getFormattedDate(
             calendarConfig.monthConfig.getPrevMonthYear(
                 uiState.value!!.selectedDate.getTheMonth(),
                 uiState.value!!.selectedDate.getTheYear()
@@ -89,16 +97,16 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     fun selectedMonthTitle(value: Date) {
         _uiState.value?.apply {
             this.selectedDate = value
-            this.selectedMonth = value.formattedDate().getCalendarMonthTitle(calendarConfig.CALENDAR_MONTH_TITLE_DATE_FORMAT)
+            this.selectedMonth = value.formattedDate()
+                .getCalendarMonthTitle(calendarConfig.CALENDAR_MONTH_TITLE_DATE_FORMAT)
             _uiState.value = this
         }
     }
 
-    private fun getFormattedDate(year: Int, month: Int, day: Int): Date {
-        return Calendar.getInstance().apply {
-            set(Calendar.YEAR, year)
-            set(Calendar.MONTH, month)
-            set(Calendar.DAY_OF_MONTH, day)
-        }.time
+    fun setCalendarUiView(value: CalendarUiView) {
+        _uiState.value?.apply {
+            this.currentCalendarUiView = value
+            _uiState.value = this
+        }
     }
 }

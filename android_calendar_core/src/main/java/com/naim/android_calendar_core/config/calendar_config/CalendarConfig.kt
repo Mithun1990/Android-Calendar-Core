@@ -9,8 +9,8 @@ import com.naim.android_calendar_core.util.Constants
 import java.util.*
 
 class CalendarConfig {
-     val weekConfig: IWeekConfig by lazy { IWeekConfigImpl() }
-     val monthConfig: MonthConfigImpl by lazy { MonthConfigImpl(weekConfig) }
+    val weekConfig: IWeekConfig by lazy { IWeekConfigImpl() }
+    val monthConfig: MonthConfigImpl by lazy { MonthConfigImpl(weekConfig) }
     val PREFER_DATE_FORMAT = Constants.PREFER_DATE_FORMAT
     val MONTH_NAME_DATE_FORMAT = Constants.MONTH_NAME_DATE_FORMAT
     val CALENDAR_MONTH_TITLE_DATE_FORMAT = Constants.CALENDAR_MONTH_TITLE_DATE_FORMAT
@@ -34,9 +34,14 @@ class CalendarConfig {
     var disableDateTextColor = Color.Yellow
     var holidayTextColor = Color.Red
     var monthTitleTextColor = Color.LightGray
-    var monthTitleTextStyle :TextStyle? = null
+    var monthTitleTextStyle: TextStyle? = null
     var isMonthChangeEnabled = true
     var isYearChangedEnabled = true
-
-
+    fun getFormattedDate(year: Int, month: Int, day: Int): Date {
+        return Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month)
+            set(Calendar.DAY_OF_MONTH, day)
+        }.time
+    }
 }
