@@ -5,8 +5,10 @@ import com.naim.android_calendar_core.extensions.getMonthName
 import com.naim.android_calendar_core.extensions.getTheDay
 import com.naim.android_calendar_core.extensions.getTheMonth
 import com.naim.android_calendar_core.extensions.getTheYear
+import com.naim.android_calendar_core.model.ComposeCalendar
 import com.naim.android_calendar_core.model.Month
 import com.naim.android_calendar_core.model.MonthItem
+import com.naim.android_calendar_core.model.Year
 import java.util.*
 
 class MonthConfigImpl(private val weekConfig: IWeekConfig) : BaseMonthConfig(), IMonthConfig {
@@ -14,14 +16,22 @@ class MonthConfigImpl(private val weekConfig: IWeekConfig) : BaseMonthConfig(), 
         date: Date,
         holidayList: List<Int>,
         listOfDisableDate: List<Date>
-    ): List<MonthItem> {
+    ): ComposeCalendar {
+
         val monthItems = mutableListOf<MonthItem>()
         val month = configureMonth(date, holidayList)
+        var year =
+            Year(
+                date.getTheYear(),
+                isLeapYear(date.getTheYear()),
+                getMonthList(date.getTheYear()),
+                month.selectedDate
+            )
         monthItems.addAll(addPreviousMonthExtraDay(month))
         monthItems.addAll(addCurrentMonthDay(month))
         monthItems.addAll(addNextMonthExtraDay(month))
         println("Month ${monthItems}")
-        return monthItems
+        return ComposeCalendar(year, month, monthItems)
     }
 
     private fun addPreviousMonthExtraDay(month: Month): List<MonthItem> {

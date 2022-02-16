@@ -13,6 +13,10 @@ abstract class BaseMonthConfig {
                 (if (year % 100 == 0) if (year % 400 == 0) 0 else 1 else 0) else 31 - (month) % 7 % 2
     }
 
+    fun isLeapYear(year: Int): Boolean {
+        return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)
+    }
+
     fun getPrevMonthYear(month: Int, year: Int): Int {
         var year = year
         if (month == Constants.MONTH_START) {
@@ -23,7 +27,7 @@ abstract class BaseMonthConfig {
 
     fun getPrevMonth(month: Int): Int {
         var month = month
-        month = if (month ==  Constants.MONTH_START) {
+        month = if (month == Constants.MONTH_START) {
             Constants.MONTH_END
         } else {
             month - 1

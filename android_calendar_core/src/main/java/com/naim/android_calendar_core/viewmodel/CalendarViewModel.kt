@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.naim.android_calendar_core.config.calendar_config.CalendarConfig
 import com.naim.android_calendar_core.extensions.*
+import com.naim.android_calendar_core.model.ComposeCalendar
 import com.naim.android_calendar_core.model.MonthItem
 import com.naim.android_calendar_core.state.CalendarUiState
 import com.naim.android_calendar_core.state.CalendarUiView
@@ -16,7 +17,7 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     private val _monthItems: MutableLiveData<List<MonthItem>> = MutableLiveData(
         calendarConfig.monthConfig.getMonthItems(
             Date(), emptyList()
-        )
+        ).selectedMonthItems
     )
     private val _monthList =
         MutableLiveData(
@@ -43,8 +44,10 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         )
         if (calendarConfig.maxDate < nextDate)
             return
-        _monthItems.value = calendarConfig.monthConfig.getMonthItems(nextDate, emptyList())
-        selectedMonthTitle(nextDate)
+        val composeCalendar = calendarConfig.monthConfig.getMonthItems(nextDate, emptyList())
+        _monthItems.value =
+            composeCalendar.selectedMonthItems
+        recycleCalendar(composeCalendar)
     }
 
     fun gotoNextYear() {
@@ -55,8 +58,10 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         )
         if (calendarConfig.maxDate < nextYear)
             return
-        _monthItems.value = calendarConfig.monthConfig.getMonthItems(nextYear, emptyList())
-        selectedMonthTitle(nextYear)
+        val composeCalendar = calendarConfig.monthConfig.getMonthItems(nextYear, emptyList())
+        _monthItems.value =
+            composeCalendar.selectedMonthItems
+        recycleCalendar(calendarConfig.monthConfig.getMonthItems(nextYear, emptyList()))
     }
 
     fun gotoPreviousYear() {
@@ -67,8 +72,9 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         )
         if (calendarConfig.minDate > nextYear)
             return
-        _monthItems.value = calendarConfig.monthConfig.getMonthItems(nextYear, emptyList())
-        selectedMonthTitle(nextYear)
+        val composeCalendar = calendarConfig.monthConfig.getMonthItems(nextYear, emptyList())
+        _monthItems.value = composeCalendar.selectedMonthItems
+        recycleCalendar(composeCalendar)
     }
 
     fun gotoPreviousMonth() {
@@ -82,8 +88,9 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         )
         if (calendarConfig.minDate > prevDate)
             return
-        _monthItems.value = calendarConfig.monthConfig.getMonthItems(prevDate, emptyList())
-        selectedMonthTitle(prevDate)
+        val composeCalendar = calendarConfig.monthConfig.getMonthItems(prevDate, emptyList())
+        _monthItems.value = composeCalendar.selectedMonthItems
+        recycleCalendar(composeCalendar)
     }
 
     fun selectedDate(value: Date) {
@@ -94,11 +101,13 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         }
     }
 
-    fun selectedMonthTitle(value: Date) {
+    fun recycleCalendar(value: ComposeCalendar) {
         _uiState.value?.apply {
-            this.selectedDate = value
-            this.selectedMonth = value.formattedDate()
+            this.selectedDate = value.month.selectedDate
+            this.selectedMonth = value.month.selectedDate.formattedDate()
                 .getCalendarMonthTitle(calendarConfig.CALENDAR_MONTH_TITLE_DATE_FORMAT)
+            this.currentMonth = value.month
+            this.currentYear = value.year
             _uiState.value = this
         }
     }
@@ -113,12 +122,16 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
     fun setMonth(value: Date) {
         _monthItems.value = calendarConfig.monthConfig.getMonthItems(
             value, emptyList()
-        )
+        ).selectedMonthItems
         selectedDate(value)
-        selectedMonthTitle(value)
+        _uiState.value?.apply {
+            this.selectedMonth = value.formattedDate()
+                .getCalendarMonthTitle(calendarConfig.CALENDAR_MONTH_TITLE_DATE_FORMAT)
+            _uiState.value = this
+        }
     }
 
-    fun getMonthList(){
+    fun getMonthList() {
         _monthList.value = calendarConfig.monthConfig.getMonthList(
             uiState.value?.selectedDate?.getTheYear()
                 ?: calendarConfig.currentDate.getTheYear()
