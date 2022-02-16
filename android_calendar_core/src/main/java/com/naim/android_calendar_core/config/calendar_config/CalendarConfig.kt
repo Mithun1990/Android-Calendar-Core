@@ -44,7 +44,7 @@ class CalendarConfig {
             set(Calendar.DAY_OF_MONTH, day)
         }.time
     }
-    var monthListBgColor = Color(0xFFCCCCCC)
+    var monthListBgColor = Color.Cyan
     var monthListItemTextColor = Color.LightGray
     var monthListItemTextStyle: TextStyle? = null
 }
