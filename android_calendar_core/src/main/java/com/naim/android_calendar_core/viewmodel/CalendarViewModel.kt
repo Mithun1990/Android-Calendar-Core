@@ -114,6 +114,14 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
         _monthItems.value = calendarConfig.monthConfig.getMonthItems(
             value, emptyList()
         )
+        selectedDate(value)
         selectedMonthTitle(value)
+    }
+
+    fun getMonthList(){
+        _monthList.value = calendarConfig.monthConfig.getMonthList(
+            uiState.value?.selectedDate?.getTheYear()
+                ?: calendarConfig.currentDate.getTheYear()
+        )
     }
 }

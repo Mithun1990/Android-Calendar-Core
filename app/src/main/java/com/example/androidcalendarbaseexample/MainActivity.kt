@@ -32,6 +32,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println(TestFactory.test())
+        viewModel.selectedDate(Calendar.getInstance().apply {
+            set(Calendar.YEAR, 2025)
+        }.time)
+        println(viewModel.uiState.value)
+        println(viewModel.getMonthList())
         setContent {
             AndroidCalendarBaseExampleTheme {
                 // A surface container using the 'background' color from the theme
