@@ -137,4 +137,5 @@ class CalendarViewModel(private val calendarConfig: CalendarConfig) : ViewModel(
                 ?: calendarConfig.currentDate.getTheYear()
         )
     }
+
 }

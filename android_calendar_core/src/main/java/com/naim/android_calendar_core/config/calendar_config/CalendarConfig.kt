@@ -5,12 +5,15 @@ import androidx.compose.ui.text.TextStyle
 import com.naim.android_calendar_core.config.month_config.MonthConfigImpl
 import com.naim.android_calendar_core.config.week_config.IWeekConfig
 import com.naim.android_calendar_core.config.week_config.IWeekConfigImpl
+import com.naim.android_calendar_core.config.year_config.IYearConfig
+import com.naim.android_calendar_core.config.year_config.YearConfigImpl
 import com.naim.android_calendar_core.util.Constants
 import java.util.*
 
 class CalendarConfig {
     val weekConfig: IWeekConfig by lazy { IWeekConfigImpl() }
     val monthConfig: MonthConfigImpl by lazy { MonthConfigImpl(weekConfig) }
+    val yearConfig: IYearConfig by lazy { YearConfigImpl(weekConfig) }
     val PREFER_DATE_FORMAT = Constants.PREFER_DATE_FORMAT
     val MONTH_NAME_DATE_FORMAT = Constants.MONTH_NAME_DATE_FORMAT
     val CALENDAR_MONTH_TITLE_DATE_FORMAT = Constants.CALENDAR_MONTH_TITLE_DATE_FORMAT
@@ -44,6 +47,7 @@ class CalendarConfig {
             set(Calendar.DAY_OF_MONTH, day)
         }.time
     }
+
     var monthListBgColor = Color.Cyan
     var monthListItemTextColor = Color.LightGray
     var monthListItemTextStyle: TextStyle? = null

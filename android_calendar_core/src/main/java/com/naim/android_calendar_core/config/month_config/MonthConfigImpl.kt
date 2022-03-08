@@ -11,7 +11,7 @@ import com.naim.android_calendar_core.model.MonthItem
 import com.naim.android_calendar_core.model.Year
 import java.util.*
 
-class MonthConfigImpl(private val weekConfig: IWeekConfig) : BaseMonthConfig(), IMonthConfig {
+open class MonthConfigImpl(private val weekConfig: IWeekConfig) : BaseMonthConfig(), IMonthConfig {
     override fun getMonthItems(
         date: Date,
         holidayList: List<Int>,
@@ -20,7 +20,7 @@ class MonthConfigImpl(private val weekConfig: IWeekConfig) : BaseMonthConfig(), 
 
         val monthItems = mutableListOf<MonthItem>()
         val month = configureMonth(date, holidayList)
-        var year =
+        val year =
             Year(
                 date.getTheYear(),
                 isLeapYear(date.getTheYear()),
