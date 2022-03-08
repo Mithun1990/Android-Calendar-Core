@@ -12,8 +12,8 @@ import java.util.*
 
 class CalendarConfig {
     val weekConfig: IWeekConfig by lazy { IWeekConfigImpl() }
-    val monthConfig: MonthConfigImpl by lazy { MonthConfigImpl(weekConfig) }
-    val yearConfig: IYearConfig by lazy { YearConfigImpl(weekConfig) }
+    val monthConfig by lazy { YearConfigImpl(weekConfig) }
+    val yearConfig by lazy { YearConfigImpl(weekConfig) }
     val PREFER_DATE_FORMAT = Constants.PREFER_DATE_FORMAT
     val MONTH_NAME_DATE_FORMAT = Constants.MONTH_NAME_DATE_FORMAT
     val CALENDAR_MONTH_TITLE_DATE_FORMAT = Constants.CALENDAR_MONTH_TITLE_DATE_FORMAT

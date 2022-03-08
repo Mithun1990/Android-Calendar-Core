@@ -4,6 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.naim.android_calendar_core.config.calendar_config.CalendarConfig
+import com.naim.android_calendar_core.config.month_config.IMonthConfig
+import com.naim.android_calendar_core.config.month_config.MonthConfigImpl
+import com.naim.android_calendar_core.config.year_config.IYearConfig
+import com.naim.android_calendar_core.config.year_config.YearConfigImpl
 import com.naim.android_calendar_core.extensions.*
 import com.naim.android_calendar_core.model.ComposeCalendar
 import com.naim.android_calendar_core.model.MonthItem
